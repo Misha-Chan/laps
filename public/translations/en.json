@@ -1,0 +1,28 @@
+{
+  "common": {
+    "back": "Back",
+    "cancel": "Cancel",
+    "changeLanguage": "Change language",
+    "close": "Close",
+    "confirm": "Confirm",
+    "create": "Create",
+    "delete": "Delete",
+    "done": "Done",
+    "email": "Email",
+    "loading": "Loading...",
+    "password": "Password",
+    "save": "Save",
+    "toggleTheme": "Toggle theme"
+  },
+  "laps": {
+    "pageTitle": "LAPS — Hostaka Labs",
+    "brand": "LAPS",
+    "emptyTitle": "No experiments right now",
+    "emptySub": "Come back later — new experiments will show up here.",
+    "navWiki": "Wiki",
+    "navMain": "Main",
+    "navReconsole": "Re-Console",
+    "toggleLanguage": "العربية",
+    "signedInAs": "Signed in as"
+  }
+}

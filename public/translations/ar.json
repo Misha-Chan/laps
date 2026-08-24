@@ -1,0 +1,28 @@
+{
+  "common": {
+    "back": "رجوع",
+    "cancel": "إلغاء",
+    "changeLanguage": "تغيير اللغة",
+    "close": "إغلاق",
+    "confirm": "تأكيد",
+    "create": "إنشاء",
+    "delete": "حذف",
+    "done": "تم",
+    "email": "البريد الإلكتروني",
+    "loading": "جارٍ التحميل...",
+    "password": "كلمة المرور",
+    "save": "حفظ",
+    "toggleTheme": "تبديل الثيم"
+  },
+  "laps": {
+    "pageTitle": "LAPS — مختبرات هوستاكا",
+    "brand": "LAPS",
+    "emptyTitle": "لا توجد حالياً تجارب",
+    "emptySub": "يمكنك العودة لاحقاً، ستظهر التجارب الجديدة هنا.",
+    "navWiki": "الويكي",
+    "navMain": "الرئيسية",
+    "navReconsole": "Re-Console",
+    "toggleLanguage": "English",
+    "signedInAs": "مسجّل الدخول باسم"
+  }
+}
