@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html class="page-laps" lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<link rel="icon" href="/laps-icon.svg" type="image/svg+xml">
+<title data-i18n="laps.pageTitle">LAPS — Hostaka Labs</title>
+<meta name="description" content="LAPS — Hostaka's experiments hub.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&family=El+Messiri:wght@400..700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="/theme.css">
+<link rel="stylesheet" href="/emoji.css">
+<link rel="stylesheet" href="/laps.css">
+<script src="/i18n.js"></script>
+<script src="/emoji.js" defer></script>
+<script src="/protect.js" defer></script>
+</head>
+<body class="page-laps">
+
+<div class="topbar">
+  <a href="/" class="brand">
+    <img src="/laps-icon.svg" alt="LAPS">
+    <span data-i18n="laps.brand">LAPS</span>
+  </a>
+
+  <div class="topbar-actions">
+    <div class="user-chip" id="userChip">
+      <span class="ua" id="userAvatar"></span>
+      <span class="un" id="userName"></span>
+    </div>
+    <button class="lang-btn" id="langToggle" onclick="toggleLapsLang()" data-i18n-title="common.changeLanguage" title="Change language">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+      <span id="langToggleLabel" data-i18n="laps.toggleLanguage">العربية</span>
+    </button>
+    <button class="icon-btn" id="themeToggle" onclick="toggleTheme()" data-i18n-title="common.toggleTheme" title="Toggle theme">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+    </button>
+  </div>
+</div>
+
+<div class="main-layout">
+  <div class="content">
+    <div class="empty-card">
+      <div class="empty-icon">
+        <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+          <path d="M9 2h6v6.5l4.2 8.1a2.4 2.4 0 0 1-2.1 3.4H6.9a2.4 2.4 0 0 1-2.1-3.4L9 8.5V2z"/>
+          <path d="M8 5.5h8"/>
+          <path d="M7.5 13.5h9"/>
+        </svg>
+      </div>
+      <div class="empty-title" data-i18n="laps.emptyTitle">No experiments right now</div>
+      <div class="empty-sub" data-i18n="laps.emptySub">Come back later — new experiments will show up here.</div>
+    </div>
+  </div>
+</div>
+
+<div class="side-rail">
+  <a class="side-rail-btn" href="https://wiki.hostaka.fun" target="_blank" rel="noopener">
+    <span class="sri">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+    </span>
+    <span class="srl" data-i18n="laps.navWiki">Wiki</span>
+  </a>
+  <a class="side-rail-btn" href="https://hostaka.fun">
+    <span class="sri">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9.5 12 3l9 6.5"/><path d="M5 10v10h5v-6h4v6h5V10"/></svg>
+    </span>
+    <span class="srl" data-i18n="laps.navMain">Main</span>
+  </a>
+  <a class="side-rail-btn" href="https://reconsole.laps.hostaka.fun" target="_blank" rel="noopener">
+    <span class="sri">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>
+    </span>
+    <span class="srl" data-i18n="laps.navReconsole">Re-Console</span>
+  </a>
+</div>
+
+<div class="laps-footer">
+  LAPS — <a href="https://hostaka.fun">hostaka.fun</a>
+</div>
+
+<div id="toastHost"></div>
+
+<script src="/shared.js" defer></script>
+<script src="/laps.js" defer></script>
+</body>
+</html>
