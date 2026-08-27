@@ -60,8 +60,7 @@ function renderUserChip(me) {
   if (me.avatar) {
     avatar.innerHTML = '<img src="' + me.avatar + '" alt="">';
   } else {
-    const initial = (me.name || me.username || '?').trim().charAt(0).toUpperCase();
-    avatar.textContent = initial;
+    avatar.innerHTML = '<img src="/default-avatar.jpg" alt="">';
   }
   chip.classList.add('show');
 }

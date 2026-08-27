@@ -58,7 +58,24 @@ app.use('/api', express.raw({ type: '*/*', limit: '10mb' }), async (req, res) =>
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.get('/robots.txt', (req, res) => {
-  res.type('text/plain').send('User-agent: *\nAllow: /\n');
+  const origin = `https://${req.get('host')}`;
+  res.type('text/plain').send(`User-agent: *\nAllow: /\n\nSitemap: ${origin}/sitemap.xml\n`);
+});
+
+// ============================================================
+// sitemap.xml — Laps (laps.hostaka.fun), part of the Hostaka Ecosystem.
+// Hostaka's experiments/labs page. Single-page site with no dynamic
+// content yet, so the sitemap currently lists just the homepage — same
+// pattern used by hostaka.fun/sitemap.xml, ready to grow if this
+// subdomain gets more pages later.
+// ============================================================
+app.get('/sitemap.xml', (req, res) => {
+  const origin = `https://${req.get('host')}`;
+  res.type('application/xml').send(
+`<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>${origin}/</loc><priority>1.0</priority></url>
+</urlset>`);
 });
 
 // صفحة واحدة فقط حالياً — أي مسار غير معروف يرجع لها بدل 404 فاضي
