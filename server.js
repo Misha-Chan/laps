@@ -13,7 +13,19 @@ const app = express();
 const HOSTAKA_API_BASE = process.env.HOSTAKA_API_BASE || 'https://hostaka.fun';
 
 app.disable('x-powered-by');
-app.set('trust proxy', true);
+// نثق بوكيل واحد فقط (بروكسي Vercel) قبل الطلب، بدل `true` اللي يثق بأي
+// X-Forwarded-For ويسمح بتزوير req.ip — نفس نمط aethercast/orbithub.
+app.set('trust proxy', 1);
+
+// رؤوس أمان أساسية على كل الردود (كانت غائبة).
+app.use((req, res, next) => {
+  res.setHeader('X-Content-Type-Options', 'nosniff');
+  res.setHeader('X-Frame-Options', 'SAMEORIGIN');
+  res.setHeader('Referrer-Policy', 'no-referrer');
+  res.setHeader('Cross-Origin-Opener-Policy', 'same-origin');
+  res.setHeader('Strict-Transport-Security', 'max-age=15552000; includeSubDomains');
+  next();
+});
 
 // ============================================================
 // بروكسي /api/* — نفس أسلوب aethercast/orbithub بالضبط
