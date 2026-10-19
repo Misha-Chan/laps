@@ -32,7 +32,25 @@ app.use((req, res, next) => {
 // يُستخدم هنا أساساً لجلب /api/me (تأكيد هوية المستخدم بعد سحب التوكن
 // بصمت من oauth.hostaka.fun) و /api/track (تتبع الزيارات العام بالمنصة).
 // ============================================================
-app.use('/api', express.raw({ type: '*/*', limit: '10mb' }), async (req, res) => {
+// حدّ معدّل بسيط لكل IP على /api/* (in-memory، مثل aethercast/orbithub) —
+// سابقاً كان البروكسي بلا أي حد، فمسارات الدخول/التسجيل قابلة للاجتياح عبر هذا النطاق.
+const RATE_WINDOW_MS = 60 * 1000;
+const RATE_MAX = Number(process.env.RATE_LIMIT_MAX || 600);
+const rateBuckets = new Map();
+function apiRateLimit(req, res, next) {
+  const key = req.ip || 'unknown';
+  const now = Date.now();
+  let b = rateBuckets.get(key);
+  if (!b || now - b.start > RATE_WINDOW_MS) { b = { start: now, count: 0 }; rateBuckets.set(key, b); }
+  b.count += 1;
+  res.setHeader('X-RateLimit-Limit', RATE_MAX);
+  res.setHeader('X-RateLimit-Remaining', Math.max(0, RATE_MAX - b.count));
+  if (b.count > RATE_MAX) return res.status(429).json({ error: 'طلبات كثيرة، حاول لاحقاً' });
+  if (rateBuckets.size > 10000) rateBuckets.clear();
+  next();
+}
+
+app.use('/api', apiRateLimit, express.raw({ type: '*/*', limit: '10mb' }), async (req, res) => {
   try {
     const targetUrl = HOSTAKA_API_BASE + '/api' + req.url;
 
