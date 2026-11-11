@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0b0b10">
+  <meta name="description" content="Panya — معرض صور وفيديو عام بدون تسجيل دخول، مدعوم بتخزين Telegram Drive.">
+  <title>Panya — معرض هوستاكا العام</title>
+  <link rel="icon" href="/panya/icon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/panya/panya.css?v=3">
+</head>
+<body>
+  <div class="ambient ambient-a" aria-hidden="true"></div>
+  <div class="ambient ambient-b" aria-hidden="true"></div>
+
+  <header class="topbar">
+    <a class="brand" href="/panya/" aria-label="Panya">
+      <img src="/panya/icon.svg" alt="" width="38" height="38">
+      <span class="brand-copy">
+        <strong>Panya</strong>
+        <small data-i18n="tagline">معرض عام</small>
+      </span>
+    </a>
+    <nav class="topbar-actions" aria-label="Panya">
+      <button id="lang-toggle" class="ghost small" type="button" aria-label="Switch language">EN</button>
+      <button id="refresh-btn" class="ghost" type="button" data-i18n="refresh">تحديث</button>
+      <button id="upload-btn" class="primary" type="button" data-i18n="upload">رفع</button>
+    </nav>
+  </header>
+
+  <main class="page">
+    <section class="hero">
+      <p class="eyebrow">
+        <span class="dot" aria-hidden="true"></span>
+        <span data-i18n="storageNote">مدعوم بتخزين Telegram Drive</span>
+      </p>
+      <h1 data-i18n="heroTitle">شارك لحظة، وشوفها أي أحد.</h1>
+      <p class="hero-text" data-i18n="heroText">Panya معرض صور وفيديو عام بدون تسجيل دخول. ارفع ملفك وسيظهر مباشرة للجميع.</p>
+      <div class="hero-actions">
+        <button id="hero-upload" class="primary large" type="button" data-i18n="upload">رفع</button>
+        <span class="hint" data-i18n="noLogin">بدون تسجيل دخول</span>
+      </div>
+    </section>
+
+    <section class="gallery-section" aria-labelledby="gallery-title">
+      <div class="section-head">
+        <h2 id="gallery-title" data-i18n="galleryTitle">أحدث المشاركات</h2>
+        <span id="count" class="count" aria-live="polite"></span>
+      </div>
+
+      <div id="gallery" class="masonry" aria-live="polite" aria-busy="true"></div>
+
+      <div id="empty" class="state empty" hidden>
+        <span class="state-icon" aria-hidden="true">✦</span>
+        <h3 data-i18n="emptyTitle">المعرض فاضي حالياً</h3>
+        <p data-i18n="emptyText">كن أول من يرفع صورة أو فيديو إلى Panya.</p>
+        <button id="empty-upload" class="primary" type="button" data-i18n="upload">رفع</button>
+      </div>
+
+      <div id="error" class="state error" hidden>
+        <span class="state-icon" aria-hidden="true">!</span>
+        <h3 data-i18n="errorTitle">تعذّر تحميل المعرض</h3>
+        <p id="error-message"></p>
+        <button id="retry-btn" class="ghost" type="button" data-i18n="retry">إعادة المحاولة</button>
+      </div>
+    </section>
+  </main>
+
+  <dialog id="upload-dialog" class="modal" aria-labelledby="upload-title">
+    <form id="upload-form" novalidate>
+      <div class="modal-head">
+        <div>
+          <p class="eyebrow small" data-i18n="uploadEyebrow">إضافة إلى المعرض</p>
+          <h2 id="upload-title" data-i18n="uploadTitle">رفع صورة أو فيديو</h2>
+        </div>
+        <button type="button" class="icon-btn" data-close aria-label="إغلاق">×</button>
+      </div>
+
+      <div id="dropzone" class="dropzone" tabindex="0" role="button" aria-label="اختيار ملف">
+        <input id="file-input" type="file" accept="image/jpeg,image/png,image/gif,image/webp,image/avif,video/mp4,video/webm,video/quicktime,video/ogg" hidden>
+        <span class="drop-icon" aria-hidden="true">＋</span>
+        <p class="drop-title" data-i18n="chooseFile">اختر صورة أو فيديو</p>
+        <p class="drop-hint" data-i18n="dropHint">أو اسحب الملف هنا</p>
+        <p id="file-info" class="file-info" hidden></p>
+      </div>
+
+      <label class="field" for="caption">
+        <span data-i18n="caption">وصف (اختياري)</span>
+        <textarea id="caption" name="caption" rows="3" maxlength="500" data-i18n-placeholder="captionPlaceholder"></textarea>
+      </label>
+
+      <div id="progress-wrap" class="progress-wrap" hidden>
+        <div class="progress" aria-hidden="true"><div id="progress-bar"></div></div>
+        <span id="progress-text">0%</span>
+      </div>
+
+      <p id="upload-error" class="form-error" role="alert" hidden></p>
+
+      <div class="modal-actions">
+        <button type="button" class="ghost" data-close data-i18n="cancel">إلغاء</button>
+        <button type="submit" id="submit-upload" class="primary" disabled data-i18n="publish">نشر</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="viewer" class="viewer" aria-label="عارض الوسائط">
+    <button type="button" class="viewer-close" data-close-viewer aria-label="إغلاق">×</button>
+    <div id="viewer-stage" class="viewer-stage"></div>
+    <div class="viewer-bar">
+      <p id="viewer-caption" class="viewer-caption"></p>
+      <span id="viewer-meta" class="viewer-meta"></span>
+    </div>
+  </dialog>
+
+  <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+
+  <script src="/panya/panya.js?v=3" defer></script>
+</body>
+</html>

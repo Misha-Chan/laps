@@ -4,10 +4,14 @@
   "description": "laps.hostaka.fun — منصة تجارب هوستاكا (LAPS)، كمنتج مستقل تابع لهوستاكا",
   "scripts": {
     "start": "node server.js",
-    "dev": "node server.js"
+    "dev": "node server.js",
+    "start:panya": "node --env-file=.env.panya server.js",
+    "panya": "node --env-file=.env.panya panya-standalone.js"
   },
   "dependencies": {
     "express": "^4.18.2",
+    "form-data": "^4.0.4",
+    "multer": "^2.0.2",
     "node-fetch": "^2.6.7"
   }
 }

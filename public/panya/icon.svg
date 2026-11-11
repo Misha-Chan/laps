@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Panya">
+  <defs>
+    <linearGradient id="panya-g" x1="10" y1="8" x2="54" y2="58" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#ffb36b"/>
+      <stop offset=".48" stop-color="#ff6b6b"/>
+      <stop offset="1" stop-color="#c44dff"/>
+    </linearGradient>
+    <radialGradient id="panya-glow" cx="0" cy="0" r="1" gradientTransform="translate(32 28) rotate(90) scale(26)">
+      <stop stop-color="#fff" stop-opacity=".95"/>
+      <stop offset="1" stop-color="#fff" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="64" height="64" rx="18" fill="#101018"/>
+  <path d="M32 8c4.7 9.8 9.5 14.6 19.3 19.3C41.5 32 36.7 36.8 32 46.6 27.3 36.8 22.5 32 12.7 27.3 22.5 22.6 27.3 17.8 32 8Z" fill="url(#panya-g)"/>
+  <circle cx="32" cy="27.3" r="7.2" fill="url(#panya-glow)"/>
+  <circle cx="32" cy="27.3" r="3.4" fill="#fff" fill-opacity=".92"/>
+</svg>

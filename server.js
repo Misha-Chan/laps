@@ -6,11 +6,33 @@
 const express = require('express');
 const path = require('path');
 const fetch = require('node-fetch');
+const { createPanya } = require('./panya');
 
 const app = express();
 
 // النطاق الرئيسي لهوستاكا (وين تعيش فعلياً كل الـ API + قاعدة البيانات)
 const HOSTAKA_API_BASE = process.env.HOSTAKA_API_BASE || 'https://hostaka.fun';
+
+// ============================================================
+// Panya — معرض عام مدعوم بتخزين Telegram Drive (REST API).
+// الـ API يعمل فقط حين يتوفر PANYA_TELEGRAM_API_KEY (الجسر المحلي).
+// على Vercel نكتفي بخدمة الواجهة + /panya/config، والواجهة
+// تتصل بالجسر عبر PANYA_PUBLIC_API_BASE أو ?api=...
+// ============================================================
+const panya = createPanya({
+  apiUrl: process.env.PANYA_TELEGRAM_API_URL,
+  apiKey: process.env.PANYA_TELEGRAM_API_KEY,
+  folderId: process.env.PANYA_TELEGRAM_FOLDER_ID,
+  folderName: process.env.PANYA_TELEGRAM_FOLDER_NAME,
+  publicApiBase: process.env.PANYA_PUBLIC_API_BASE,
+  dataDir: process.env.PANYA_DATA_DIR,
+  maxUploadMb: process.env.PANYA_MAX_UPLOAD_MB,
+  maxItems: process.env.PANYA_MAX_ITEMS,
+  uploadsPerHour: process.env.PANYA_UPLOADS_PER_HOUR,
+  listPerMinute: process.env.PANYA_LIST_PER_MINUTE,
+  mediaPerMinute: process.env.PANYA_MEDIA_PER_MINUTE,
+  allowedOrigins: process.env.PANYA_ALLOWED_ORIGINS,
+});
 
 app.disable('x-powered-by');
 // نثق بوكيل واحد فقط (بروكسي Vercel) قبل الطلب، بدل `true` اللي يثق بأي
@@ -83,6 +105,29 @@ app.use('/api', apiRateLimit, express.raw({ type: '*/*', limit: '10mb' }), async
 });
 
 // ============================================================
+// Panya — الواجهة العامة + API التخزين (عبر Telegram Drive REST API)
+// ============================================================
+app.get('/panya/config', (req, res) => {
+  res.setHeader('Cache-Control', 'no-store');
+  res.json(panya.config());
+});
+
+app.use('/panya/api', panya.router);
+
+app.get(/^\/panya$/, (req, res) => res.redirect(301, '/panya/'));
+
+app.use(
+  '/panya',
+  express.static(path.join(__dirname, 'public', 'panya'), {
+    index: 'index.html',
+    maxAge: '1h',
+  })
+);
+
+// لا نترك أي مسار فرعي غير موجود داخل Panya يسقط على صفحة LAPS.
+app.use('/panya', (req, res) => res.status(404).send('Panya page not found'));
+
+// ============================================================
 // ملفات ثابتة (index.html/js/css، الحزم المشتركة: theme/emoji/i18n...)
 // ============================================================
 app.use(express.static(path.join(__dirname, 'public')));
@@ -105,6 +150,7 @@ app.get('/sitemap.xml', (req, res) => {
 `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url><loc>${origin}/</loc><priority>1.0</priority></url>
+  <url><loc>${origin}/panya/</loc><priority>0.8</priority></url>
 </urlset>`);
 });
 
@@ -113,7 +159,14 @@ app.use((req, res) => res.sendFile(path.join(__dirname, 'public', 'index.html'))
 
 const PORT = process.env.PORT || 3000;
 if (require.main === module) {
-  app.listen(PORT, () => console.log(`✅ laps server running on port ${PORT} (proxying /api to ${HOSTAKA_API_BASE})`));
+  app.listen(PORT, () => {
+    console.log(`✅ laps server running on port ${PORT} (proxying /api to ${HOSTAKA_API_BASE})`);
+    console.log(
+      process.env.PANYA_TELEGRAM_API_KEY
+        ? '✅ Panya: Telegram Drive REST API configured'
+        : 'ℹ️  Panya: storage not configured (UI/config only)'
+    );
+  });
 }
 
 module.exports = app;
