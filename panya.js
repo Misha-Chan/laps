@@ -183,11 +183,19 @@ function createPanya(options = {}) {
   const mediaPerMinute = Math.max(1, Number(options.mediaPerMinute) || 600);
   const configured = Boolean(apiUrl && apiKey && (configuredFolderId || folderName));
 
-  const dataDir = path.resolve(
-    String(options.dataDir || path.join(__dirname, '.panya-data'))
-  );
+  // Vercel's bundle directory is read-only; keep local metadata in /tmp there.
+  // The real bridge (local/standalone) still uses .panya-data next to the app.
+  const defaultDataDir = process.env.VERCEL
+    ? path.join(os.tmpdir(), 'panya-data')
+    : path.join(__dirname, '.panya-data');
+  const dataDir = path.resolve(String(options.dataDir || defaultDataDir));
   const manifestPath = path.join(dataDir, 'manifest.json');
-  fs.mkdirSync(dataDir, { recursive: true });
+  try {
+    fs.mkdirSync(dataDir, { recursive: true });
+  } catch (error) {
+    // Config-only deployments (Vercel) never touch the manifest.
+    if (configured) throw error;
+  }
 
   const allowedOrigins =
     String(options.allowedOrigins || '*').trim() === '*'
