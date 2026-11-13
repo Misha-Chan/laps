@@ -43,21 +43,27 @@
 
 <div class="main-layout">
   <div class="content">
-    <div class="empty-card">
-      <div class="empty-icon">
-        <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-          <path d="M9 2h6v6.5l4.2 8.1a2.4 2.4 0 0 1-2.1 3.4H6.9a2.4 2.4 0 0 1-2.1-3.4L9 8.5V2z"/>
-          <path d="M8 5.5h8"/>
-          <path d="M7.5 13.5h9"/>
-        </svg>
-      </div>
-      <div class="empty-title" data-i18n="laps.emptyTitle">No experiments right now</div>
-      <div class="empty-sub" data-i18n="laps.emptySub">Come back later — new experiments will show up here.</div>
+    <div class="experiment-grid">
+      <a class="experiment-card" href="/panya/">
+        <span class="experiment-icon"><img src="/panya/icon.svg" alt="Panya"></span>
+        <span class="experiment-copy">
+          <strong data-i18n="laps.panyaTitle">Panya</strong>
+          <small data-i18n="laps.panyaSub">Public image &amp; video gallery — new experiment</small>
+        </span>
+        <span class="experiment-badge" data-i18n="laps.panyaBadge">Trial</span>
+        <span class="experiment-arrow" aria-hidden="true">↗</span>
+      </a>
     </div>
   </div>
 </div>
 
 <div class="side-rail">
+  <a class="side-rail-btn" href="/panya/">
+    <span class="sri">
+      <img src="/panya/icon.svg" alt="" width="18" height="18">
+    </span>
+    <span class="srl" data-i18n="laps.navPanya">Panya</span>
+  </a>
   <a class="side-rail-btn" href="https://wiki.hostaka.fun" target="_blank" rel="noopener">
     <span class="sri">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>

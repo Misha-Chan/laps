@@ -19,9 +19,13 @@
     "brand": "LAPS",
     "emptyTitle": "لا توجد حالياً تجارب",
     "emptySub": "يمكنك العودة لاحقاً، ستظهر التجارب الجديدة هنا.",
+    "panyaTitle": "Panya",
+    "panyaSub": "معرض صور وفيديو عام — تجربة جديدة",
+    "panyaBadge": "تجربة",
     "navWiki": "الويكي",
     "navMain": "الرئيسية",
     "navReconsole": "Re-Console",
+    "navPanya": "Panya",
     "toggleLanguage": "English",
     "signedInAs": "مسجّل الدخول باسم"
   }

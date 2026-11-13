@@ -1,0 +1,7 @@
+[Unit]
+Description=Check and restart Telegram Drive for Panya
+After=network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=%h/.local/bin/panya-telegram-watchdog.sh

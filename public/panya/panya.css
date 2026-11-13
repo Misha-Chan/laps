@@ -909,6 +909,44 @@ input:focus-visible {
   }
 }
 
+/* ---------- Trial notice ---------- */
+.trial-notice {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.8rem;
+  margin: 0 0 0.5rem;
+  padding: 0.9rem 1.1rem;
+  border: 1px solid rgba(255, 138, 92, 0.28);
+  border-radius: var(--radius-sm);
+  background: linear-gradient(135deg, rgba(255, 138, 92, 0.1), rgba(164, 107, 255, 0.08));
+  color: var(--muted);
+  font-size: 0.9rem;
+  line-height: 1.7;
+}
+
+.trial-notice p {
+  margin: 0;
+}
+
+.trial-badge {
+  flex: none;
+  margin-top: 0.12rem;
+  padding: 0.18rem 0.55rem;
+  border-radius: 999px;
+  background: linear-gradient(135deg, var(--brand), var(--brand-2));
+  color: #1a0f14;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+
+@media (max-width: 430px) {
+  .trial-notice {
+    font-size: 0.84rem;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,

@@ -143,6 +143,86 @@ body.page-laps .empty-sub {
   line-height: 1.6;
 }
 
+/* ---------- Experiment cards ---------- */
+body.page-laps .experiment-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 16px;
+  width: 100%;
+  max-width: 640px;
+}
+body.page-laps .experiment-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 18px 20px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow);
+  text-decoration: none;
+  color: var(--text);
+  transition: transform var(--transition-fast), border-color var(--transition-fast), background var(--transition-fast);
+}
+body.page-laps .experiment-card:hover {
+  transform: translateY(-2px);
+  border-color: var(--primary-border);
+  background: var(--primary-light);
+}
+body.page-laps .experiment-icon {
+  width: 54px;
+  height: 54px;
+  flex: none;
+  border-radius: 15px;
+  overflow: hidden;
+  display: grid;
+  place-items: center;
+  background: var(--primary-light);
+  border: 1px solid var(--primary-border);
+}
+body.page-laps .experiment-icon img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+body.page-laps .experiment-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+body.page-laps .experiment-copy strong {
+  font-size: 1rem;
+  font-weight: 800;
+}
+body.page-laps .experiment-copy small {
+  color: var(--muted);
+  font-size: 0.8rem;
+  line-height: 1.45;
+}
+body.page-laps .experiment-badge {
+  flex: none;
+  padding: 0.18rem 0.5rem;
+  border-radius: 999px;
+  background: var(--primary-light);
+  border: 1px solid var(--primary-border);
+  color: var(--primary);
+  font-size: 0.65rem;
+  font-weight: 800;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+body.page-laps .experiment-arrow {
+  margin-inline-start: auto;
+  color: var(--muted);
+  font-size: 1.1rem;
+}
+body.page-laps .side-rail-btn .sri img {
+  width: 18px;
+  height: 18px;
+  border-radius: 4px;
+}
+
 /* ---------- Side rail (Wiki / Main / Re-Console) ---------- */
 body.page-laps .side-rail {
   position: fixed;

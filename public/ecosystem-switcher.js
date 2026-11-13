@@ -15,6 +15,7 @@
     { key: 'apps',       name: 'Hostaka Apps', url: 'https://apps.hostaka.fun/',         icon: '/icon/apps-icon.png' },
     { key: 'wiki',       name: 'Wiki',         url: 'https://wiki.hostaka.fun/',         icon: '/icon/wiki-icon.png' },
     { key: 'laps',       name: 'Laps',         url: 'https://laps.hostaka.fun/',         icon: '/icon/laps-icon.png' },
+    { key: 'panya',      name: 'Panya',        url: 'https://laps.hostaka.fun/panya/',   icon: 'https://laps.hostaka.fun/panya/icon.svg' },
     { key: 'console',    name: 'Console',      url: 'https://console.hostaka.fun/',      icon: '/icon/console-icon.png' },
     { key: 'olympus',    name: 'Olympus',      url: 'https://olympus.hostaka.fun/',      icon: '/icon/olympus-icon.png' }
   ];

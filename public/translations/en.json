@@ -19,9 +19,13 @@
     "brand": "LAPS",
     "emptyTitle": "No experiments right now",
     "emptySub": "Come back later — new experiments will show up here.",
+    "panyaTitle": "Panya",
+    "panyaSub": "Public image & video gallery — new experiment",
+    "panyaBadge": "Trial",
     "navWiki": "Wiki",
     "navMain": "Main",
     "navReconsole": "Re-Console",
+    "navPanya": "Panya",
     "toggleLanguage": "العربية",
     "signedInAs": "Signed in as"
   }
