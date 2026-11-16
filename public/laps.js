@@ -75,4 +75,68 @@ async function initLaps() {
   }
 }
 
+// ===== OpenClaw-style shell: sidebar drawer + experiment search =====
+function initLapsShell() {
+  const sidebar = document.getElementById('sidebar');
+  const toggle = document.getElementById('sidebar-toggle');
+  const overlay = document.getElementById('sidebar-overlay');
+
+  function closeSidebar() {
+    if (!sidebar) return;
+    sidebar.classList.remove('open');
+    overlay?.classList.remove('show');
+    toggle?.setAttribute('aria-expanded', 'false');
+  }
+
+  if (sidebar && toggle) {
+    toggle.addEventListener('click', () => {
+      const open = sidebar.classList.toggle('open');
+      overlay?.classList.toggle('show', open);
+      toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+    });
+    overlay?.addEventListener('click', closeSidebar);
+    sidebar.querySelectorAll('a, button').forEach((element) => {
+      element.addEventListener('click', closeSidebar);
+    });
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape') closeSidebar();
+    });
+  }
+
+  const search = document.getElementById('laps-search');
+  const grid = document.getElementById('experiment-grid');
+  const noResults = document.getElementById('laps-no-results');
+  if (!search || !grid) return;
+
+  const cards = Array.from(grid.querySelectorAll('.feature-card'));
+
+  function applySearch() {
+    const query = search.value.trim().toLowerCase();
+    let visible = 0;
+
+    cards.forEach((card) => {
+      const haystack = (card.dataset.search || card.textContent || '').toLowerCase();
+      const show = !query || haystack.includes(query);
+      card.hidden = !show;
+      if (show) visible += 1;
+    });
+
+    grid.classList.toggle('is-filtering', Boolean(query));
+    if (noResults) noResults.hidden = visible !== 0;
+  }
+
+  search.addEventListener('input', applySearch);
+
+  document.addEventListener('keydown', (event) => {
+    if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === 'k') {
+      event.preventDefault();
+      search.focus();
+      search.select();
+    }
+  });
+
+  document.addEventListener('hostaka:langchange', applySearch);
+}
+
 initLaps();
+initLapsShell();

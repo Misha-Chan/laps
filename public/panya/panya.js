@@ -39,6 +39,19 @@ const STRINGS = {
     configuredHint: 'هذه النسخة تحتاج جسر Telegram Drive المحلي. شغّل الجسر ثم أضف ?api=... إلى الرابط.',
     storageError: 'تعذّر الوصول إلى Telegram Drive. تأكد من أن التطبيق مفتوح ومتصل.',
     count: '{n} مشاركة',
+    groupExplore: 'استكشف',
+    groupMedia: 'الوسائط',
+    groupEcosystem: 'المنظومة',
+    filterAll: 'كل الوسائط',
+    filterImages: 'الصور',
+    filterVideos: 'الفيديوهات',
+    searchPlaceholder: 'ابحث في المعرض…',
+    backToLaps: 'LAPS',
+    navWiki: 'الويكي',
+    navMain: 'الرئيسية',
+    navSource: 'المصدر',
+    noResultsTitle: 'لا توجد نتائج',
+    noResultsText: 'جرّب بحثاً أو تصنيفاً آخر.',
   },
   en: {
     pageTitle: 'Panya — Hostaka public gallery',
@@ -78,6 +91,19 @@ const STRINGS = {
     configuredHint: 'This deployment needs the local Telegram Drive bridge. Start the bridge, then add ?api=... to the URL.',
     storageError: 'Could not reach Telegram Drive. Make sure the app is open and connected.',
     count: '{n} posts',
+    groupExplore: 'Explore',
+    groupMedia: 'Media',
+    groupEcosystem: 'Ecosystem',
+    filterAll: 'All media',
+    filterImages: 'Images',
+    filterVideos: 'Videos',
+    searchPlaceholder: 'Search gallery…',
+    backToLaps: 'LAPS',
+    navWiki: 'Wiki',
+    navMain: 'Main',
+    navSource: 'Source',
+    noResultsTitle: 'No results',
+    noResultsText: 'Try a different search or filter.',
   },
 };
 
@@ -87,6 +113,8 @@ const state = {
     ((navigator.language || '').startsWith('ar') ? 'ar' : 'en'),
   apiBase: '/panya/api',
   items: [],
+  filter: 'all',
+  search: '',
   selectedFile: null,
   uploading: false,
   config: {
@@ -98,6 +126,7 @@ const state = {
 const gallery = document.getElementById('gallery');
 const emptyState = document.getElementById('empty');
 const errorState = document.getElementById('error');
+const noResultsState = document.getElementById('no-results');
 const errorMessage = document.getElementById('error-message');
 const retryBtn = document.getElementById('retry-btn');
 const countLabel = document.getElementById('count');
@@ -106,6 +135,15 @@ const uploadBtn = document.getElementById('upload-btn');
 const heroUpload = document.getElementById('hero-upload');
 const emptyUpload = document.getElementById('empty-upload');
 const langToggle = document.getElementById('lang-toggle');
+const langLabel = document.getElementById('lang-label');
+const panyaSearch = document.getElementById('panya-search');
+const navUpload = document.getElementById('nav-upload');
+const sidebar = document.getElementById('sidebar');
+const sidebarToggle = document.getElementById('sidebar-toggle');
+const sidebarOverlay = document.getElementById('sidebar-overlay');
+const sidebarUpload = document.getElementById('sidebar-upload');
+const sidebarRefresh = document.getElementById('sidebar-refresh');
+const filterButtons = Array.from(document.querySelectorAll('[data-gallery-filter]'));
 
 const uploadDialog = document.getElementById('upload-dialog');
 const uploadForm = document.getElementById('upload-form');
@@ -214,7 +252,9 @@ function applyLanguage() {
   document.documentElement.lang = state.lang;
   document.documentElement.dir = state.lang === 'ar' ? 'rtl' : 'ltr';
   document.title = t('pageTitle');
-  langToggle.textContent = state.lang === 'ar' ? 'EN' : 'ع';
+  const langText = state.lang === 'ar' ? 'EN' : 'ع';
+  if (langLabel) langLabel.textContent = langText;
+  else if (langToggle) langToggle.textContent = langText;
 
   document.querySelectorAll('[data-i18n]').forEach((element) => {
     const key = element.dataset.i18n;
@@ -226,6 +266,18 @@ function applyLanguage() {
     const key = element.dataset.i18nPlaceholder;
     const value = t(key);
     if (value) element.placeholder = value;
+  });
+
+  document.querySelectorAll('[data-i18n-title]').forEach((element) => {
+    const key = element.dataset.i18nTitle;
+    const value = t(key);
+    if (value) element.title = value;
+  });
+
+  document.querySelectorAll('[data-i18n-aria-label]').forEach((element) => {
+    const key = element.dataset.i18nAriaLabel;
+    const value = t(key);
+    if (value) element.setAttribute('aria-label', value);
   });
 
   if (state.items.length) {
@@ -254,6 +306,7 @@ function showSkeleton() {
   gallery.setAttribute('aria-busy', 'true');
   emptyState.hidden = true;
   errorState.hidden = true;
+  if (noResultsState) noResultsState.hidden = true;
   countLabel.textContent = t('loading');
 
   const fragment = document.createDocumentFragment();
@@ -285,6 +338,7 @@ function showError(message, allowRetry = true) {
   gallery.setAttribute('aria-busy', 'false');
   emptyState.hidden = true;
   errorState.hidden = false;
+  if (noResultsState) noResultsState.hidden = true;
   errorMessage.textContent = message || t('storageError');
   countLabel.textContent = '';
   retryBtn.hidden = !allowRetry;
@@ -294,6 +348,22 @@ function hideError() {
   errorState.hidden = true;
 }
 
+function visibleItems() {
+  const query = state.search;
+
+  return state.items.filter((item) => {
+    if (state.filter === 'images' && item.kind !== 'image') return false;
+    if (state.filter === 'videos' && item.kind !== 'video') return false;
+
+    if (query) {
+      const haystack = `${item.caption || ''} ${item.name || ''}`.toLowerCase();
+      if (!haystack.includes(query)) return false;
+    }
+
+    return true;
+  });
+}
+
 function renderItems() {
   gallery.textContent = '';
   gallery.setAttribute('aria-busy', 'false');
@@ -301,15 +371,18 @@ function renderItems() {
 
   if (!state.items.length) {
     emptyState.hidden = false;
+    if (noResultsState) noResultsState.hidden = true;
     countLabel.textContent = '';
     return;
   }
 
+  const items = visibleItems();
   emptyState.hidden = true;
-  countLabel.textContent = t('count').replace('{n}', String(state.items.length));
+  if (noResultsState) noResultsState.hidden = items.length !== 0;
+  countLabel.textContent = t('count').replace('{n}', String(items.length));
 
   const fragment = document.createDocumentFragment();
-  state.items.forEach((item) => fragment.appendChild(createCard(item)));
+  items.forEach((item) => fragment.appendChild(createCard(item)));
   gallery.appendChild(fragment);
 }
 
@@ -606,6 +679,55 @@ retryBtn.addEventListener('click', () => loadItems());
 uploadBtn.addEventListener('click', openUploadDialog);
 heroUpload.addEventListener('click', openUploadDialog);
 emptyUpload.addEventListener('click', openUploadDialog);
+navUpload?.addEventListener('click', openUploadDialog);
+sidebarUpload?.addEventListener('click', openUploadDialog);
+sidebarRefresh?.addEventListener('click', () => loadItems());
+
+filterButtons.forEach((button) => {
+  button.addEventListener('click', () => {
+    state.filter = button.dataset.galleryFilter || 'all';
+    filterButtons.forEach((candidate) => {
+      candidate.classList.toggle('active', candidate === button);
+    });
+    renderItems();
+  });
+});
+
+panyaSearch?.addEventListener('input', () => {
+  state.search = panyaSearch.value.trim().toLowerCase();
+  renderItems();
+});
+
+document.addEventListener('keydown', (event) => {
+  if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === 'k') {
+    event.preventDefault();
+    panyaSearch?.focus();
+    panyaSearch?.select();
+  }
+});
+
+// Mobile sidebar drawer
+function closeSidebar() {
+  if (!sidebar) return;
+  sidebar.classList.remove('open');
+  sidebarOverlay?.classList.remove('show');
+  sidebarToggle?.setAttribute('aria-expanded', 'false');
+}
+
+if (sidebar && sidebarToggle) {
+  sidebarToggle.addEventListener('click', () => {
+    const open = sidebar.classList.toggle('open');
+    sidebarOverlay?.classList.toggle('show', open);
+    sidebarToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+  });
+  sidebarOverlay?.addEventListener('click', closeSidebar);
+  sidebar.querySelectorAll('a, button').forEach((element) => {
+    element.addEventListener('click', closeSidebar);
+  });
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape') closeSidebar();
+  });
+}
 
 dropzone.addEventListener('click', () => fileInput.click());
 dropzone.addEventListener('keydown', (event) => {
