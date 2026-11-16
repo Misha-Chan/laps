@@ -1,16 +1,62 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" role="img" aria-label="LAPS">
+  <title>LAPS</title>
+
   <defs>
-    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#8B5E3C"/>
-      <stop offset="1" stop-color="#C9986B"/>
+    <!-- خلفية التطبيق: نفس سطح الصفحة الداكن -->
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#1A1A1F"/>
+      <stop offset="1" stop-color="#0A0A0C"/>
     </linearGradient>
+
+    <!-- وهج أحمر خفيف من الأعلى -->
+    <radialGradient id="glow" cx="0.5" cy="0.22" r="0.7">
+      <stop offset="0" stop-color="#E5484D" stop-opacity="0.28"/>
+      <stop offset="1" stop-color="#E5484D" stop-opacity="0"/>
+    </radialGradient>
+
+    <!-- لون الأكسنت الأساسي في الثيم -->
+    <linearGradient id="accent" gradientUnits="userSpaceOnUse"
+                    x1="12" y1="12" x2="52" y2="52">
+      <stop offset="0"   stop-color="#FFA2A6"/>
+      <stop offset="0.55" stop-color="#ED4E53"/>
+      <stop offset="1"   stop-color="#C4353A"/>
+    </linearGradient>
+
+    <linearGradient id="liquid" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#E5484D" stop-opacity="0.42"/>
+      <stop offset="1" stop-color="#E5484D" stop-opacity="0.12"/>
+    </linearGradient>
+
+    <clipPath id="flaskClip">
+      <path d="M26 13.5v11.7L16.5 43.4c-1.6 3.1.6 6.8 4.1 6.8h22.8c3.5 0 5.7-3.7 4.1-6.8L38 25.2V13.5z"/>
+    </clipPath>
   </defs>
-  <rect width="64" height="64" rx="16" fill="url(#g)"/>
-  <path d="M26 12h12v13.2l9.5 18.2c1.6 3.1-.6 6.8-4.1 6.8H20.6c-3.5 0-5.7-3.7-4.1-6.8L26 25.2V12z"
-        fill="none" stroke="#fff" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
-  <path d="M22 15h20" stroke="#fff" stroke-width="3" stroke-linecap="round"/>
-  <path d="M21.5 33h21" stroke="#fff" stroke-width="2.4" stroke-linecap="round" opacity="0.85"/>
-  <circle cx="30" cy="41" r="1.8" fill="#fff"/>
-  <circle cx="35.5" cy="45" r="2.4" fill="#fff"/>
-  <circle cx="27" cy="46" r="1.4" fill="#fff"/>
+
+  <!-- الحاوية -->
+  <rect width="64" height="64" rx="16" fill="url(#bg)"/>
+  <rect width="64" height="64" rx="16" fill="url(#glow)"/>
+  <rect x="0.6" y="0.6" width="62.8" height="62.8" rx="15.4"
+        fill="none" stroke="#2B2B33" stroke-width="1.2"/>
+
+  <!-- سائل داخل الدورق -->
+  <g clip-path="url(#flaskClip)">
+    <rect x="16" y="33" width="32" height="22" fill="url(#liquid)"/>
+  </g>
+
+  <!-- الدورق -->
+  <path d="M26 13.5v11.7L16.5 43.4c-1.6 3.1.6 6.8 4.1 6.8h22.8c3.5 0 5.7-3.7 4.1-6.8L38 25.2V13.5"
+        fill="none" stroke="url(#accent)" stroke-width="3"
+        stroke-linejoin="round" stroke-linecap="round"/>
+
+  <!-- حافة الفتحة العلوية -->
+  <path d="M23.6 13.4h16.8" stroke="url(#accent)" stroke-width="3.1" stroke-linecap="round"/>
+
+  <!-- سطح السائل -->
+  <path d="M22.8 33h18.4" stroke="#FF9A9E" stroke-width="2.2"
+        stroke-linecap="round" opacity="0.6"/>
+
+  <!-- فقاعات -->
+  <circle cx="30"   cy="41"   r="1.8" fill="#FFFFFF" opacity="0.92"/>
+  <circle cx="35.5" cy="45"   r="2.4" fill="#FFFFFF" opacity="0.92"/>
+  <circle cx="27"   cy="46"   r="1.4" fill="#FFFFFF" opacity="0.75"/>
 </svg>
